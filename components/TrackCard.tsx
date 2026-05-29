@@ -1,115 +1,177 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+
+import {
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+
 import { Track } from "../types/music";
 
 type Props = {
   track: Track;
-  liked: boolean;
+
   onPress: () => void;
+
+  liked: boolean;
+
   onLike: () => void;
-  onAddToPlaylist: () => void;
-  onRemove?: () => void;
-  showRemove?: boolean;
+
+  onPlaylist: () => void;
+
+  inPlaylist: boolean;
 };
 
 export function TrackCard({
   track,
-  liked,
   onPress,
+  liked,
   onLike,
-  onAddToPlaylist,
-  onRemove,
-  showRemove = false,
+  onPlaylist,
+  inPlaylist,
 }: Props) {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.85}
+    <View
       style={{
         backgroundColor: "#111831",
         borderRadius: 20,
-        borderWidth: 1,
-        borderColor: "#1F2A4A",
         padding: 12,
         marginBottom: 12,
       }}
     >
-      <View style={{ flexDirection: "row", gap: 12 }}>
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.8}
+        style={{
+          flexDirection: "row",
+        }}
+      >
         <Image
-          source={{ uri: track.cover_medium || track.cover_big || track.cover }}
-          style={{ width: 76, height: 76, borderRadius: 16, backgroundColor: "#1A2240" }}
+          source={{
+            uri: track.cover_medium,
+          }}
+          style={{
+            width: 76,
+            height: 76,
+            borderRadius: 16,
+          }}
         />
 
-        <View style={{ flex: 1, justifyContent: "center" }}>
+        <View
+          style={{
+            marginLeft: 12,
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
           <Text
             numberOfLines={1}
-            style={{ color: "#FFFFFF", fontSize: 16, fontWeight: "700" }}
+            style={{
+              color: "white",
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
           >
             {track.title}
           </Text>
-          <Text numberOfLines={1} style={{ color: "#A0A8C0", marginTop: 4 }}>
+
+          <Text
+            style={{
+              color: "#A0A8C0",
+              marginTop: 4,
+            }}
+          >
             {track.artist_name}
           </Text>
-          <Text numberOfLines={1} style={{ color: "#6E78A0", marginTop: 4, fontSize: 12 }}>
+
+          <Text
+            numberOfLines={1}
+            style={{
+              color: "#6E78A0",
+              marginTop: 4,
+              fontSize: 12,
+            }}
+          >
             {track.album_title}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
 
-      <View style={{ flexDirection: "row", gap: 10, marginTop: 12, flexWrap: "wrap" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 14,
+        }}
+      >
         <TouchableOpacity
           onPress={onLike}
-          activeOpacity={0.8}
           style={{
-            backgroundColor: liked ? "#2C1630" : "#0D1429",
-            borderRadius: 14,
-            paddingVertical: 10,
-            paddingHorizontal: 12,
+            marginRight: 20,
             flexDirection: "row",
             alignItems: "center",
-            gap: 8,
           }}
         >
-          <Ionicons name={liked ? "heart" : "heart-outline"} size={16} color={liked ? "#FF5C8A" : "#FFFFFF"} />
-          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>{liked ? "Curtida" : "Curtir"}</Text>
+          <Ionicons
+            name={
+              liked
+                ? "heart"
+                : "heart-outline"
+            }
+            size={18}
+            color={
+              liked
+                ? "#FF5C8A"
+                : "#FFFFFF"
+            }
+          />
+
+          <Text
+            style={{
+              color: "white",
+              marginLeft: 6,
+            }}
+          >
+            Curtir
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={onAddToPlaylist}
-          activeOpacity={0.8}
+          onPress={onPlaylist}
           style={{
-            backgroundColor: "#0D1429",
-            borderRadius: 14,
-            paddingVertical: 10,
-            paddingHorizontal: 12,
             flexDirection: "row",
             alignItems: "center",
-            gap: 8,
           }}
         >
-          <MaterialIcons name="playlist-add" size={16} color="#7C5CFF" />
-          <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>Playlist</Text>
-        </TouchableOpacity>
+          <MaterialIcons
+            name={
+              inPlaylist
+                ? "playlist-remove"
+                : "playlist-add"
+            }
+            size={20}
+            color={
+              inPlaylist
+                ? "#FF5C8A"
+                : "#7C5CFF"
+            }
+          />
 
-        {showRemove && onRemove ? (
-          <TouchableOpacity
-            onPress={onRemove}
-            activeOpacity={0.8}
+          <Text
             style={{
-              backgroundColor: "#2B1018",
-              borderRadius: 14,
-              paddingVertical: 10,
-              paddingHorizontal: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
+              color: "white",
+              marginLeft: 6,
             }}
           >
-            <MaterialIcons name="delete-outline" size={16} color="#FF7A95" />
-            <Text style={{ color: "#FFFFFF", fontWeight: "700" }}>Remover</Text>
-          </TouchableOpacity>
-        ) : null}
+            {inPlaylist
+              ? "Remover"
+              : "Playlist"}
+          </Text>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }

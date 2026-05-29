@@ -1,89 +1,91 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useState } from "react";
+
 import { Track } from "../types/music";
 
-type MusicContextValue = {
-  likes: Record<number, Track>;
+type MusicContextType = {
+  liked: Track[];
+
   playlist: Track[];
-  isLiked: (id: number) => boolean;
+
   toggleLike: (track: Track) => void;
+
   addToPlaylist: (track: Track) => void;
+
   removeFromPlaylist: (id: number) => void;
-  clearPlaylist: () => void;
+
+  isLiked: (id: number) => boolean;
+
+  isInPlaylist: (id: number) => boolean;
 };
 
-const MusicContext = createContext<MusicContextValue | null>(null);
+const MusicContext = createContext({} as MusicContextType);
 
-const LIKES_KEY = "@harmoniq:likes";
-const PLAYLIST_KEY = "@harmoniq:playlist";
+export function MusicProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [liked, setLiked] = useState<Track[]>([]);
 
-export function MusicProvider({ children }: { children: React.ReactNode }) {
-  const [likes, setLikes] = useState<Record<number, Track>>({});
   const [playlist, setPlaylist] = useState<Track[]>([]);
-  const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const [likesRaw, playlistRaw] = await Promise.all([
-          AsyncStorage.getItem(LIKES_KEY),
-          AsyncStorage.getItem(PLAYLIST_KEY),
-        ]);
+  function toggleLike(track: Track) {
+    const exists = liked.find(
+      (item) => item.id === track.id
+    );
 
-        if (likesRaw) setLikes(JSON.parse(likesRaw));
-        if (playlistRaw) setPlaylist(JSON.parse(playlistRaw));
-      } finally {
-        setHydrated(true);
-      }
-    })();
-  }, []);
+    if (exists) {
+      setLiked(
+        liked.filter((item) => item.id !== track.id)
+      );
+    } else {
+      setLiked([...liked, track]);
+    }
+  }
 
-  useEffect(() => {
-    if (!hydrated) return;
-    AsyncStorage.setItem(LIKES_KEY, JSON.stringify(likes));
-  }, [hydrated, likes]);
+  function addToPlaylist(track: Track) {
+    const exists = playlist.find(
+      (item) => item.id === track.id
+    );
 
-  useEffect(() => {
-    if (!hydrated) return;
-    AsyncStorage.setItem(PLAYLIST_KEY, JSON.stringify(playlist));
-  }, [hydrated, playlist]);
+    if (exists) return;
 
-  const api = useMemo<MusicContextValue>(() => {
-    return {
-      likes,
-      playlist,
-      isLiked: (id) => Boolean(likes[id]),
-      toggleLike: (track) => {
-        setLikes((current) => {
-          const next = { ...current };
-          if (next[track.id]) {
-            delete next[track.id];
-          } else {
-            next[track.id] = track;
-          }
-          return next;
-        });
-      },
-      addToPlaylist: (track) => {
-        setPlaylist((current) => {
-          if (current.some((item) => item.id === track.id)) return current;
-          return [track, ...current];
-        });
-      },
-      removeFromPlaylist: (id) => {
-        setPlaylist((current) => current.filter((item) => item.id !== id));
-      },
-      clearPlaylist: () => setPlaylist([]),
-    };
-  }, [likes, playlist]);
+    setPlaylist([...playlist, track]);
+  }
 
-  return <MusicContext.Provider value={api}>{children}</MusicContext.Provider>;
+  function removeFromPlaylist(id: number) {
+    setPlaylist(
+      playlist.filter((item) => item.id !== id)
+    );
+  }
+
+  function isLiked(id: number) {
+    return liked.some((item) => item.id === id);
+  }
+
+  function isInPlaylist(id: number) {
+    return playlist.some(
+      (item) => item.id === id
+    );
+  }
+
+  return (
+    <MusicContext.Provider
+      value={{
+        liked,
+        playlist,
+        toggleLike,
+        addToPlaylist,
+        removeFromPlaylist,
+        isLiked,
+        isInPlaylist,
+      }}
+    >
+      {children}
+    </MusicContext.Provider>
+  );
 }
 
 export function useMusic() {
-  const ctx = useContext(MusicContext);
-  if (!ctx) {
-    throw new Error("useMusic must be used inside MusicProvider");
-  }
-  return ctx;
+  return useContext(MusicContext);
 }
