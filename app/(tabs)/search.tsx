@@ -16,12 +16,22 @@ import { Track } from "../../types/music";
 
 import { TrackCard } from "../../components/TrackCard";
 
+import { useMusic } from "../../context/MusicContext";
+
 import { router } from "expo-router";
 
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
 
   const [tracks, setTracks] = useState<Track[]>([]);
+
+  const {
+    toggleLike,
+    addToPlaylist,
+    removeFromPlaylist,
+    isLiked,
+    isInPlaylist,
+  } = useMusic();
 
   async function handleSearch() {
     if (!query.trim()) return;
@@ -85,16 +95,26 @@ export default function SearchScreen() {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <TrackCard
-            track={item}
-            onPress={() =>
-              router.push({
-                pathname: "/track/[id]",
-                params: {
-                  id: String(item.id),
-                },
-              })
+          track={item}
+          liked={isLiked(item.id)}
+          inPlaylist={isInPlaylist(item.id)}
+          onLike={() => toggleLike(item)}
+          onPlaylist={() => {
+            if (isInPlaylist(item.id)) {
+              removeFromPlaylist(item.id);
+            } else {
+              addToPlaylist(item);
             }
-          />
+          }}
+          onPress={() =>
+            router.push({
+              pathname: "/track/[id]",
+              params: {
+                id: String(item.id),
+              },
+            })
+          }
+        />
         )}
       />
     </View>
