@@ -22,7 +22,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -39,7 +39,9 @@
           }
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      "@react-native-vector-icons/ionicons",
+      "@react-native-vector-icons/material-icons"
     ],
     "experiments": {
       "typedRoutes": true,

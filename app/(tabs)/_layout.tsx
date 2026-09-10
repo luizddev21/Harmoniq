@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 
-import { MaterialIcons } from "@expo/vector-icons";
 
 export default function TabsLayout() {
   return (
@@ -26,14 +25,6 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: "Início",
-
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="music-note"
-              color={color}
-              size={size}
-            />
-          ),
         }}
       />
 
@@ -41,14 +32,6 @@ export default function TabsLayout() {
         name="search"
         options={{
           title: "Buscar",
-
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="search"
-              color={color}
-              size={size}
-            />
-          ),
         }}
       />
 
@@ -56,14 +39,6 @@ export default function TabsLayout() {
         name="liked"
         options={{
           title: "Curtidas",
-
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="favorite"
-              color={color}
-              size={size}
-            />
-          ),
         }}
       />
 
@@ -71,14 +46,6 @@ export default function TabsLayout() {
         name="playlist"
         options={{
           title: "Playlist",
-
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons
-              name="playlist-play"
-              color={color}
-              size={size}
-            />
-          ),
         }}
       />
     </Tabs>

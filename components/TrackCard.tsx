@@ -1,14 +1,9 @@
 import {
-  View,
-  Text,
   Image,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-
-import {
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
 
 import { Track } from "../types/music";
 
@@ -115,19 +110,6 @@ export function TrackCard({
             alignItems: "center",
           }}
         >
-          <Ionicons
-            name={
-              liked
-                ? "heart"
-                : "heart-outline"
-            }
-            size={18}
-            color={
-              liked
-                ? "#FF5C8A"
-                : "#FFFFFF"
-            }
-          />
 
           <Text
             style={{
@@ -146,19 +128,6 @@ export function TrackCard({
             alignItems: "center",
           }}
         >
-          <MaterialIcons
-            name={
-              inPlaylist
-                ? "playlist-remove"
-                : "playlist-add"
-            }
-            size={20}
-            color={
-              inPlaylist
-                ? "#FF5C8A"
-                : "#7C5CFF"
-            }
-          />
 
           <Text
             style={{

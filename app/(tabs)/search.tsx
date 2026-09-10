@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 
-import { MaterialIcons } from "@expo/vector-icons";
 
 import { searchTracks } from "../../services/deezer";
 
@@ -60,11 +59,7 @@ export default function SearchScreen() {
           marginBottom: 20,
         }}
       >
-        <MaterialIcons
-          name="search"
-          size={20}
-          color="#A0A8C0"
-        />
+
 
         <TextInput
           placeholder="Buscar música"

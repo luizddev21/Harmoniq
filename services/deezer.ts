@@ -1,7 +1,7 @@
 import { Track } from "../types/music";
 
-const BASE_URL =
-  "https://corsproxy.io/?https://api.deezer.com";
+const CORSPROXY_API_KEY = "938bcc81";
+const DEEZER_URL = "https://api.deezer.com";
 
 function mapTrack(raw: any): Track {
   return {
@@ -19,7 +19,13 @@ function mapTrack(raw: any): Track {
 }
 
 async function requestJson(path: string) {
-  const response = await fetch(`${BASE_URL}${path}`);
+  const targetUrl = `${DEEZER_URL}${path}`;
+
+  const proxyUrl =
+    `https://corsproxy.io/?key=${encodeURIComponent(CORSPROXY_API_KEY)}` +
+    `&url=${encodeURIComponent(targetUrl)}`;
+
+  const response = await fetch(proxyUrl);
 
   if (!response.ok) {
     throw new Error(`Erro Deezer: ${response.status}`);
@@ -29,7 +35,10 @@ async function requestJson(path: string) {
 }
 
 export async function getChartTracks(limit = 20): Promise<Track[]> {
-  const json = await requestJson(`/chart/0/tracks?limit=${limit}`);
+  const json = await requestJson(
+    `/chart/0/tracks?limit=${encodeURIComponent(limit)}`
+  );
+
   return json.data.map(mapTrack);
 }
 
@@ -42,6 +51,7 @@ export async function searchTracks(query: string): Promise<Track[]> {
 }
 
 export async function getTrackById(id: number): Promise<Track> {
-  const json = await requestJson(`/track/${id}`);
+  const json = await requestJson(`/track/${encodeURIComponent(id)}`);
+
   return mapTrack(json);
 }

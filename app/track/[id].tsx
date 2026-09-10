@@ -15,7 +15,6 @@ import {
   useAudioPlayerStatus,
 } from "expo-audio";
 
-import { Ionicons } from "@expo/vector-icons";
 
 import { getTrackById } from "../../services/deezer";
 
@@ -127,11 +126,6 @@ export default function TrackScreen() {
           alignItems: "center",
         }}
       >
-        <Ionicons
-          name={status.playing ? "pause" : "play"}
-          size={20}
-          color="white"
-        />
 
         <Text
           style={{
