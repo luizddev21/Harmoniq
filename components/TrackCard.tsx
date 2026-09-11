@@ -1,4 +1,11 @@
 import {
+  Heart,
+  ListMinus,
+  ListPlus,
+  Play,
+} from "lucide-react-native";
+
+import {
   Image,
   Text,
   TouchableOpacity,
@@ -9,15 +16,10 @@ import { Track } from "../types/music";
 
 type Props = {
   track: Track;
-
   onPress: () => void;
-
   liked: boolean;
-
   onLike: () => void;
-
   onPlaylist: () => void;
-
   inPlaylist: boolean;
 };
 
@@ -94,30 +96,52 @@ export function TrackCard({
             {track.album_title}
           </Text>
         </View>
+
+        <View
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 21,
+            backgroundColor: "#7C5CFF",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Play
+            size={19}
+            color="white"
+            fill="white"
+          />
+        </View>
       </TouchableOpacity>
 
       <View
         style={{
           flexDirection: "row",
           marginTop: 14,
+          gap: 20,
         }}
       >
         <TouchableOpacity
           onPress={onLike}
           style={{
-            marginRight: 20,
             flexDirection: "row",
             alignItems: "center",
           }}
         >
+          <Heart
+            size={19}
+            color={liked ? "#7C5CFF" : "#A0A8C0"}
+            fill={liked ? "#7C5CFF" : "transparent"}
+          />
 
           <Text
             style={{
-              color: "white",
+              color: liked ? "#7C5CFF" : "white",
               marginLeft: 6,
             }}
           >
-            Curtir
+            {liked ? "Curtida" : "Curtir"}
           </Text>
         </TouchableOpacity>
 
@@ -128,6 +152,17 @@ export function TrackCard({
             alignItems: "center",
           }}
         >
+          {inPlaylist ? (
+            <ListMinus
+              size={19}
+              color="#A0A8C0"
+            />
+          ) : (
+            <ListPlus
+              size={19}
+              color="#A0A8C0"
+            />
+          )}
 
           <Text
             style={{
@@ -135,9 +170,7 @@ export function TrackCard({
               marginLeft: 6,
             }}
           >
-            {inPlaylist
-              ? "Remover"
-              : "Playlist"}
+            {inPlaylist ? "Remover" : "Playlist"}
           </Text>
         </TouchableOpacity>
       </View>

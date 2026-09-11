@@ -1,7 +1,5 @@
 import { Stack } from "expo-router";
-
 import { StatusBar } from "expo-status-bar";
-
 import { MusicProvider } from "../context/MusicContext";
 
 export default function Layout() {
@@ -14,9 +12,7 @@ export default function Layout() {
           headerStyle: {
             backgroundColor: "#0B1020",
           },
-
           headerTintColor: "#FFFFFF",
-
           contentStyle: {
             backgroundColor: "#050816",
           },
@@ -24,16 +20,12 @@ export default function Layout() {
       >
         <Stack.Screen
           name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
+          options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="track/[id]"
-          options={{
-            title: "Música",
-          }}
+          options={{ title: "Música" }}
         />
       </Stack>
     </MusicProvider>
